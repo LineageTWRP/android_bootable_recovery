@@ -78,7 +78,7 @@ LOCAL_MODULE := recovery
 
 #ifeq ($(TARGET_USERIMAGES_USE_F2FS),true)
 #ifeq ($(HOST_OS),linux)
-#LOCAL_REQUIRED_MODULES := mkfs.f2fs
+#LOCAL_REQUIRED_MODULES := sload.f2fs mkfs.f2fs
 #endif
 #endif
 
