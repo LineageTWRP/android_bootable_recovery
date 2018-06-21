@@ -1019,14 +1019,14 @@ int Vold_Decrypt_Core(const string& Password) {
 	}
 
 #ifndef TW_CRYPTO_USE_SBIN_VOLD
-	// Mount system and check for vold and vdc
-	if (!PartitionManager.Mount_By_Path("/system", true)) {
+	// Mount ANDROID_ROOT and check for vold and vdc
+	if (!PartitionManager.Mount_By_Path(PartitionManager.Get_Android_Root_Path(), true)) {
 		return VD_ERR_UNABLE_TO_MOUNT_SYSTEM;
-	} else if (!TWFunc::Path_Exists("/system/bin/vold")) {
-		LOGINFO("ERROR: /system/bin/vold not found, aborting.\n");
+	} else if ((!TWFunc::Path_Exists("/system/bin/vold")) && (!TWFunc::Path_Exists(PartitionManager.Get_Android_Root_Path() + "/system/bin/vold"))) {
+		LOGINFO("ERROR: vold not found, aborting.\n");
 		return VD_ERR_MISSING_VOLD;
-	} else if (!TWFunc::Path_Exists("/system/bin/vdc")) {
-		LOGINFO("ERROR: /system/bin/vdc not found, aborting.\n");
+	} else if ((!TWFunc::Path_Exists("/system/bin/vdc")) && (!TWFunc::Path_Exists(PartitionManager.Get_Android_Root_Path() + "/system/bin/vdc"))) {
+		LOGINFO("ERROR: vdc not found, aborting.\n");
 		return VD_ERR_MISSING_VDC;
 	}
 #endif
@@ -1117,11 +1117,11 @@ int Vold_Decrypt_Core(const string& Password) {
 		Restore_Recovery_Fstab();
 
 #ifndef TW_CRYPTO_USE_SBIN_VOLD
-	if (!PartitionManager.UnMount_By_Path("/system", true)) {
-		// PartitionManager failed to unmount /system, this should not happen,
+	if (!PartitionManager.UnMount_By_Path(PartitionManager.Get_Android_Root_Path(), true)) {
+		// PartitionManager failed to unmount ANDROID_ROOT, this should not happen,
 		// but in case it does, do a lazy unmount
-		LOGINFO("WARNING: system could not be unmounted normally!\n");
-		umount2("/system", MNT_DETACH);
+		LOGINFO("WARNING: '%s' could not be unmounted normally!\n", PartitionManager.Get_Android_Root_Path().c_str());
+		umount2(PartitionManager.Get_Android_Root_Path().c_str(), MNT_DETACH);
 	}
 #endif
 
