@@ -477,6 +477,11 @@ ifeq ($(shell test $(CM_PLATFORM_SDK_VERSION) -ge 3; echo $$?),0)
         fsck.f2fs \
         mkfs.f2fs
 endif
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 26; echo $$?),0)
+ifeq ($(TW_OREO_MR1_F2FS),true)
+    LOCAL_CFLAGS += -DOREO_MR1_F2FS
+endif
+endif
 endif
 
 ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 25; echo $$?),0)

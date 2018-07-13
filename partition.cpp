@@ -2227,12 +2227,25 @@ bool TWPartition::Wipe_F2FS() {
 		string size_str = to_string(dev_sz / 4096);
 
 		gui_msg(Msg("formatting_using=Formatting {1} using {2}...")(Display_Name)("mkfs.f2fs"));
-		command = "mkfs.f2fs -d1 -f -O encrypt -O quota -w 4096";
+		command = "mkfs.f2fs -d1 -f";
+#ifdef OREO_MR1_F2FS
+		command += " -O encrypt -O quota -w 4096";
+#endif
 		command += " " + Actual_Block_Device + " " + size_str;
 		LOGINFO("mkfs.f2fs command: %s\n", command.c_str());
 		if (TWFunc::Exec_Cmd(command) == 0) {
 			if (NeedPreserveFooter)
 				Wipe_Crypto_Key();
+#ifdef OREO_MR1_F2FS
+			if (TWFunc::Path_Exists("/sbin/sload.f2fs")) {
+				command = "sload.f2fs -t " + Mount_Point + " " + Actual_Block_Device;
+				LOGINFO("sload.f2fs command: %s\n", command.c_str());
+				if (TWFunc::Exec_Cmd(command) != 0) {
+					gui_msg(Msg(msg::kError, "unable_to_wipe=Unable to wipe {1}.")(Display_Name));
+					return false;
+				}
+			}
+#endif
 			Recreate_AndSec_Folder();
 			gui_msg("done=Done.");
 			return true;
