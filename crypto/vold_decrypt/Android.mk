@@ -41,7 +41,11 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
         # from TARGET_ROOT_OUT thereafter
         LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)
 
-        LOCAL_SRC_FILES := $(LOCAL_MODULE)
+        ifeq ($(TW_CRYPTO_USE_SBIN_VOLD),true)
+            LOCAL_SRC_FILES := init.recovery.sbin_vold_decrypt.rc
+        else
+            LOCAL_SRC_FILES := $(LOCAL_MODULE)
+        endif
 
         # Add additional .rc files and imports into init.recovery.vold_decrypt.rc
         # Note: any init.recovery.vold_decrypt.{service}.rc that are not default
@@ -95,6 +99,10 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
                 LOCAL_CFLAGS += -DTW_CRYPTO_SYSTEM_VOLD_DEBUG
                 LOCAL_CFLAGS += -DVD_STRACE_BIN=\"$(TW_CRYPTO_SYSTEM_VOLD_DEBUG)\"
             endif
+        endif
+
+        ifeq ($(TW_CRYPTO_USE_SBIN_VOLD),true)
+            LOCAL_CFLAGS += -DTW_CRYPTO_USE_SBIN_VOLD
         endif
 
         LOCAL_SRC_FILES = vold_decrypt.cpp

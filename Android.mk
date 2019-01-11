@@ -296,6 +296,11 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
         LOCAL_SHARED_LIBRARIES += libe4crypt
     endif
     endif
+    ifneq ($(TW_CRYPTO_USE_SBIN_VOLD),)
+    ifneq ($(TW_CRYPTO_USE_SBIN_VOLD),false)
+        TW_CRYPTO_USE_SYSTEM_VOLD := $(TW_CRYPTO_USE_SBIN_VOLD)
+    endif
+    endif
     ifneq ($(TW_CRYPTO_USE_SYSTEM_VOLD),)
     ifneq ($(TW_CRYPTO_USE_SYSTEM_VOLD),false)
         LOCAL_CFLAGS += -DTW_CRYPTO_USE_SYSTEM_VOLD
@@ -790,6 +795,12 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
     include $(commands_recovery_local_path)/crypto/scrypt/Android.mk
     ifeq ($(TW_INCLUDE_CRYPTO_FBE), true)
         include $(commands_recovery_local_path)/crypto/ext4crypt/Android.mk
+    endif
+    ifneq ($(TW_CRYPTO_USE_SBIN_VOLD),)
+    ifneq ($(TW_CRYPTO_USE_SBIN_VOLD),false)
+        LOCAL_REQUIRED_MODULES += vold vdc
+        TW_CRYPTO_USE_SYSTEM_VOLD := $(TW_CRYPTO_USE_SBIN_VOLD)
+    endif
     endif
     ifneq ($(TW_CRYPTO_USE_SYSTEM_VOLD),)
     ifneq ($(TW_CRYPTO_USE_SYSTEM_VOLD),false)

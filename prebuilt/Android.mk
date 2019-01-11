@@ -189,6 +189,17 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
             RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libcryptfs_hw.so
         endif
     endif
+    ifneq ($(TW_CRYPTO_USE_SBIN_VOLD),)
+    ifneq ($(TW_CRYPTO_USE_SBIN_VOLD),false)
+        RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/vold
+        RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/vdc
+        RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libdiskconfig.so
+        RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libf2fs_sparseblock.so
+        RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/liblogwrap.so
+        RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libnl.so
+        RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libsysutils.so
+    endif
+    endif
     # FBE files
     ifeq ($(TW_INCLUDE_CRYPTO_FBE), true)
         RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libe4crypt.so
