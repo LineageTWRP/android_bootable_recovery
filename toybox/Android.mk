@@ -524,7 +524,7 @@ ALL_TOOLS += \
     vconfig \
     watch \
     xxd
-ifeq ($(shell test $(PLATFORM_SDK_VERSION) -lt 27; echo $$?),0)
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -le 27; echo $$?),0)
 ALL_TOOLS += \
     xzcat
 endif
