@@ -305,6 +305,7 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
     ifneq ($(TW_CRYPTO_USE_SYSTEM_VOLD),false)
         LOCAL_CFLAGS += -DTW_CRYPTO_USE_SYSTEM_VOLD
         LOCAL_STATIC_LIBRARIES += libvolddecrypt
+        LOCAL_REQUIRED_MODULES += init.recovery.vold_decrypt.rc
     endif
     endif
 endif
